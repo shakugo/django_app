@@ -6,4 +6,4 @@ from django.db import models
 # Create your models here.
 class ChatLog(models.Model):
   message = models.TextField()
-  send_date = models.DateField()
+  send_date = models.DateTimeField()

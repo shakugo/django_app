@@ -3,6 +3,9 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 from channels.db import database_sync_to_async
+import datetime
+from slack.models import ChatLog
+import pytz
 
 class SlackConsumer(WebsocketConsumer):
     def connect(self):
@@ -47,8 +50,16 @@ class SlackConsumer(WebsocketConsumer):
             'message': message
         }))
 
-    @database_sync_to_async
+    #@database_sync_to_async
     def save_message(self, message):
+        print("test")
         print(message)
-        return 0
+
+        dt_now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
+        print(dt_now)
+        now = dt_now.strftime("%s")
+        ChatLog.objects.create(
+            message = message,
+            send_date = dt_now,
+        )
         # return User.objects.all()[0].name
