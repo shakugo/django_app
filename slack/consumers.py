@@ -2,6 +2,7 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
+from channels.db import database_sync_to_async
 
 class SlackConsumer(WebsocketConsumer):
     def connect(self):
@@ -40,8 +41,14 @@ class SlackConsumer(WebsocketConsumer):
     # Receive message from room group
     def send_message(self, event):
         message = event['message']
-
+        self.save_message(message)
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message
         }))
+
+    @database_sync_to_async
+    def save_message(self, message):
+        print(message)
+        return 0
+        # return User.objects.all()[0].name
