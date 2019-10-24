@@ -20,7 +20,13 @@
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         var message = data['message'];
-        document.querySelector('#chat-log').value += (message + '\n');
+        if (data['init'] == 1){
+            for (var i = 0; i < message.length; i++) {
+                document.querySelector('#chat-log').value += (message[i] + '\n');
+            }
+        } else {
+            document.querySelector('#chat-log').value += (message + '\n');
+        }
     };
 
     chatSocket.onclose = function(e) {
